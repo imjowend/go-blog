@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post - Blog Go</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="post-header">
+            <a href="/" class="back-link">← Volver a Inicio</a>
+        </header>
+
+        <main>
+            <article id="post-container">
+                <div class="loading">Cargando post...</div>
+            </article>
+
+            <div id="post-content" style="display: none;">
+                <div class="post-meta">
+                    <h1 id="post-title"></h1>
+                    <div class="meta-info">
+                        <span id="post-date"></span>
+                        <div class="language-toggle">
+                            <button id="lang-toggle-btn" class="btn btn-secondary">
+                                <span id="current-lang">Español</span> →
+                                <span id="switch-to-lang">English</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="post-body" class="post-body"></div>
+
+                <div class="post-actions">
+                    <button id="copy-summary-btn" class="btn btn-primary">
+                        📋 Copiar Resumen
+                    </button>
+                    <a href="/" class="btn btn-secondary">Volver a Inicio</a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Hecho con Go &copy; 2024</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        // Cargar post al cargar la página
+        document.addEventListener('DOMContentLoaded', loadPost);
+    </script>
+</body>
+</html>
