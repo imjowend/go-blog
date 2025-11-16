@@ -14,14 +14,12 @@ import (
 
 // Post representa un post de blog con contenido en español e inglés
 type Post struct {
-	ID         int    `json:"id"`
-	TitleES    string `json:"title_es"`
-	TitleEN    string `json:"title_en"`
-	Date       string `json:"date"`
-	SummaryES  string `json:"summary_es"`
-	SummaryEN  string `json:"summary_en"`
-	ContentES  string `json:"content_es"`
-	ContentEN  string `json:"content_en"`
+	ID      int    `json:"id"`
+	Title   string `json:"title"`
+	Date    string `json:"date"`
+	Url     string `json:"url"`
+	Content string `json:"content"`
+	Summary string `json:"summary"`
 }
 
 var posts []Post
@@ -115,7 +113,7 @@ func main() {
 // loadPosts carga los posts desde el archivo JSON
 func loadPosts() error {
 	// Determinar la ruta del archivo JSON
-	jsonPath := filepath.Join("data", "posts_translated.json")
+	jsonPath := filepath.Join("data", "posts_es.json")
 
 	// Abrir el archivo
 	file, err := os.Open(jsonPath)
