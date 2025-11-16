@@ -12,19 +12,35 @@ import (
 	"strings"
 )
 
-// Post representa un post de blog con contenido en español e inglés
+// Post representa un post de blog
 type Post struct {
-	ID         int    `json:"id"`
-	TitleES    string `json:"title_es"`
-	TitleEN    string `json:"title_en"`
-	Date       string `json:"date"`
-	SummaryES  string `json:"summary_es"`
-	SummaryEN  string `json:"summary_en"`
-	ContentES  string `json:"content_es"`
-	ContentEN  string `json:"content_en"`
+	ID                int    `json:"id"`
+	Title             string `json:"title"`
+	Date              string `json:"date"`
+	URL               string `json:"url"`
+	ContentOriginal   string `json:"content_original,omitempty"`   // Solo en posts_es.json
+	ContentTraducido  string `json:"content_traducido,omitempty"`  // Solo en posts_es.json
+	Content           string `json:"content,omitempty"`            // Solo en posts_en.json
+	Resumen           string `json:"resumen,omitempty"`            // Solo en posts_es.json
 }
 
-var posts []Post
+// Language representa el idioma configurado
+type Language string
+
+const (
+	Spanish    Language = "es"
+	English    Language = "en"
+	Portuguese Language = "pt"
+)
+
+var (
+	posts           []Post
+	currentLanguage Language = Spanish // Idioma por defecto: español
+	// Para cambiar el idioma, modifica esta variable a:
+	// - Spanish (usa posts_es.json)
+	// - English (usa posts_en.json)
+	// - Portuguese (usa posts_pt.json, cuando esté disponible)
+)
 
 func main() {
 	// Cargar posts desde el archivo JSON
@@ -112,15 +128,16 @@ func main() {
 	}
 }
 
-// loadPosts carga los posts desde el archivo JSON
+// loadPosts carga los posts desde el archivo JSON según el idioma configurado
 func loadPosts() error {
-	// Determinar la ruta del archivo JSON
-	jsonPath := filepath.Join("data", "posts_translated.json")
+	// Determinar la ruta del archivo JSON según el idioma
+	filename := getPostsFilename(currentLanguage)
+	jsonPath := filepath.Join("data", filename)
 
 	// Abrir el archivo
 	file, err := os.Open(jsonPath)
 	if err != nil {
-		return fmt.Errorf("error abriendo archivo: %w", err)
+		return fmt.Errorf("error abriendo archivo %s: %w", jsonPath, err)
 	}
 	defer file.Close()
 
@@ -135,6 +152,26 @@ func loadPosts() error {
 		return fmt.Errorf("error parseando JSON: %w", err)
 	}
 
-	log.Printf("Cargados %d posts exitosamente\n", len(posts))
+	log.Printf("Cargados %d posts exitosamente desde %s (idioma: %s)\n", len(posts), filename, currentLanguage)
 	return nil
+}
+
+// getPostsFilename devuelve el nombre del archivo de posts según el idioma
+func getPostsFilename(lang Language) string {
+	switch lang {
+	case Spanish:
+		return "posts_es.json"
+	case English:
+		return "posts_en.json"
+	case Portuguese:
+		return "posts_pt.json"
+	default:
+		return "posts_es.json" // Fallback a español
+	}
+}
+
+// setLanguage cambia el idioma y recarga los posts
+func setLanguage(lang Language) error {
+	currentLanguage = lang
+	return loadPosts()
 }
