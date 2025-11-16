@@ -1,0 +1,20 @@
+# Binarios compilados
+backend/blog-server
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Archivos de test
+*.test
+
+# Archivos de salida
+*.out
+
+# Dependencias de Go
+vendor/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
